@@ -2,150 +2,65 @@
 
 import * as React from "react"
 import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
   IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
   IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
   IconListDetails,
-  IconReport,
-  IconSearch,
   IconSettings,
-  IconUsers,
+  IconHelp,
+  IconSearch,
 } from "@tabler/icons-react"
-
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
 } from "@/components/ui/sidebar"
+import { Pizza } from "lucide-react"
+import Link from "next/link"
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "Gabriel Virginio",
+    email: "gabriel@example.com",
+    avatar: "/avatars/user.jpg",
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
+      name: "Produtos",
+      link: "/painel/produtos" as const,
+      icon: IconDatabase,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
+      name: "Categorias",
+      link: "/painel/categorias" as const,
       icon: IconFolder,
     },
     {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
+      name: "Pedidos",
+      link: "/painel/pedidos" as const,
+      icon: IconListDetails,
     },
   ],
   navSecondary: [
     {
-      title: "Settings",
-      url: "#",
+      name: "Configurações",
+      link: "/painel/configuracoes" as const,
       icon: IconSettings,
     },
     {
-      title: "Get Help",
-      url: "#",
+      name: "Ajuda",
+      link: "/painel/ajuda" as const,
       icon: IconHelp,
     },
     {
-      title: "Search",
-      url: "#",
+      name: "Pesquisar",
+      link: "/painel/pesquisa" as const,
       icon: IconSearch,
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
     },
   ],
 }
@@ -153,6 +68,7 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
+      {/* Header */}
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -160,21 +76,56 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+              <Link href="/painel">
+                <Pizza className="!size-5" />
+                <span className="text-base font-semibold">Delivery</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
+      {/* Conteúdo principal */}
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {data.navMain.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.link}>
+                      <item.icon className="!size-5" />
+                      <span>{item.name}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Secundário */}
+        <SidebarGroup className="mt-auto">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {data.navSecondary.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.link}>
+                      <item.icon className="!size-5" />
+                      <span>{item.name}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
+
+      {/* Rodapé futuro (usuário, etc.) */}
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {/* Você pode adicionar <NavUser user={data.user} /> aqui se desejar */}
       </SidebarFooter>
     </Sidebar>
   )
