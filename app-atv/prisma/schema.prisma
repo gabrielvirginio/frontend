@@ -69,4 +69,10 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+
+}
+
+ model Categorias {
+  id String @id @default(uuid())
+  nome String
 }
